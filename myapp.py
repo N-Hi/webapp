@@ -14,3 +14,4 @@ selected_targets = st.multiselect('select targets', targets, default=targets)
 df = df[df.target.isin(selected_targets)]
 
 st.dataframe(df)
+
