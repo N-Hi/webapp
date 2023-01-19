@@ -25,31 +25,31 @@ clf.fit(X, y)
 import streamlit as st
 
 ## サイドパネル（インプット部）
-st.sidebar.header('Input Features')
+st.sidebar.header('マーカーを移動させてください')
 
-sepalValue = st.sidebar.slider('sepal length (cm)', min_value=0.0, max_value=10.0, step=0.1)
-petalValue = st.sidebar.slider('petal length (cm)', min_value=0.0, max_value=10.0, step=0.1)
+sepalValue = st.sidebar.slider('がく片の長さ (cm)', min_value=0.0, max_value=10.0, step=0.1)
+petalValue = st.sidebar.slider('花弁の長さ  (cm)', min_value=0.0, max_value=10.0, step=0.1)
 
 ## メインパネル
-st.title("Iris Classifier")
+st.title("## アヤメ分類アプリ")
 
-st.write("## Input value")
+st.write("## がく片、花弁の長さ")
 
 ### インプットデータ（1行のデータフレーム）
-value_df = pd.DataFrame([],columns=['data','sepal length (cm)','petal length (cm)'])
-record = pd.Series(['data',sepalValue, petalValue], index=value_df.columns)
+value_df = pd.DataFrame([],columns=['長さ','がく片の長さ (cm)','花弁の長さ (cm)'])
+record = pd.Series(['長さ',sepalValue, petalValue], index=value_df.columns)
 value_df = value_df.append(record, ignore_index=True)
-value_df.set_index("data",inplace=True)
+value_df.set_index("長さ",inplace=True)
 
 ### 予測
 pred_probs = clf.predict_proba(value_df)
-pred_df = pd.DataFrame(pred_probs,columns=['setosa','versicolor','virginica'],index=['probability'])
+pred_df = pd.DataFrame(pred_probs,columns=['setosa','versicolor','versinica'],index=['確率'])
 
 ### 結果出力
 st.write(value_df)
-st.write("## Output probability")
+st.write("## それぞれの確率")
 st.write(pred_df)
 name = pred_df.idxmax(axis=1).tolist()
 st.write("## 結果")
-st.write('このアイリスはおそらく',str(name[0]),"です")
+st.write('このアヤメはおそらく',str(name[0]),"です")
 
