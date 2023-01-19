@@ -1,24 +1,42 @@
 import streamlit as st
 import networkx as nx
+from mypulp import GRB, Model, quicksum, multidict, tuplelist
 
-# 空のグラフを作成
-G = nx.Graph()
 
-st.title("経路最適化アプリ")
+model=Model("lo1")
 
-# ユーザーからの入力を取得
-start = st.text_input("出発地を入力してください:")
-destinations = st.text_input("目的地を入力してください(カンマ区切り):").split(",")
+#ユーザーからの入力を取得
+formula1 = st.text_input("数式1")
+formula2 = st.text_input("数式2")
+formula3 = st.text_input("数式3")
+formula4 = st.text_input("数式4")
 
-# グラフにエッジを追加
-for destination in destinations:
-    G.add_edge(start, destination)
+formulaX = st.text_input("求めたいもの（式でも可）")
 
-# 最短経路を探す
-shortest_route = nx.shortest_path(G, start, destinations[-1])
+#最大、最少を求め、結果出す
+model.addConstr(formula1)
+model.addConstr(formula2)
+model.addConstr(formula3)
+model.addConstr(formula4)
 
-st.write("最短経路:")
-st.write(shortest_route)
+#最大値
+model.setObjective(formulaX,GRB.MAXIMIZE)
+
+model.optimize()
+
+result_MAX = model.ObjVal
+st.write("最大値:")
+st.write("result_MAX")
+
+#最小値
+model.setObjective(formulaX,GRB.MINIMIZE)
+
+model.optimize()
+
+result_MIN = model.ObjVal
+st.write("最小値:")
+st.write("result_MIN")
+
 
 
 
